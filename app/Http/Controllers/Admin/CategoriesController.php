@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class CategoriesController extends Controller
@@ -20,7 +21,7 @@ class CategoriesController extends Controller
 
     public function create(Request $request)
     {
-       return Inertia::render('Categories/Create');
+        return Inertia::render('Categories/Create');
     }
 
     public function destroy(Category $category)
@@ -30,5 +31,20 @@ class CategoriesController extends Controller
         $category->delete();
         return redirect()->route('categories.index')
             ->with('success', 'Category deleted successfully.');
+    }
+
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', Rule::unique(Category::class)]
+        ]);
+
+        Category::create($data);
+
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Category created successfully.');
     }
 }
