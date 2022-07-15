@@ -21,9 +21,30 @@ class CategoriesController extends Controller
 
     public function create(Request $request)
     {
-        return Inertia::render('Categories/Create');
+        return Inertia::render('Categories/Create', [
+            'edit' => false,
+            'category' => (object)[]
+        ]);
     }
 
+    public function edit(Category $category)
+    {
+        return Inertia::render('Categories/Create', [
+            'edit' => true,
+            'category' => new CategoryResource($category)
+        ]);
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', Rule::unique('categories')->ignore($category->id)],
+        ]);
+
+        $category->update($data);
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
+    }
     public function destroy(Category $category)
     {
 
@@ -38,7 +59,7 @@ class CategoriesController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', Rule::unique(Category::class)]
+            'slug' => ['required', 'string', Rule::unique(Category::class)]
         ]);
 
         Category::create($data);

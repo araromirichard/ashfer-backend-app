@@ -1,9 +1,7 @@
 <template>
     <AppLayout title="Dashboard">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Categories
-            </h2>
+            <Breadcrumbs :items="breadcrumbs"></Breadcrumbs>
         </template>
 
         <Container>
@@ -13,6 +11,9 @@
                     <tr v-for="category in categories.data" :key="category.id">
                         <td>
                             {{ category.name }}
+                        </td>
+                        <td>
+                            {{ category.created_at_for_human }}
                         </td>
                         <td>
                             <div
@@ -58,6 +59,7 @@ import AppTable from "../../Components/Table.vue";
 import JetButton from "@/Jetstream/Button";
 import Container from "../../Components/Container.vue";
 import Card from "../../Components/Card.vue";
+import Breadcrumbs from "../../Components/Breadcrumbs.vue";
 
 export default {
     components: {
@@ -70,6 +72,7 @@ export default {
         JetButton,
         Container,
         Card,
+        Breadcrumbs,
     },
     props: {
         categories: {},
@@ -81,11 +84,26 @@ export default {
                     name: "Name",
                 },
                 {
+                    name: "Created Date",
+                },
+                {
                     name: "Action",
                     class: "text-right",
                 },
             ];
         },
+
+        breadcrumbs() {
+            return [
+                {
+                    label: "Categories",
+                },
+            ];
+        },
     },
+
+    // mounted() {
+    //     console.log("hello");
+    // },
 };
 </script>

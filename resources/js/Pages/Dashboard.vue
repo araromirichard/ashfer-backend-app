@@ -1,14 +1,23 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import Welcome from '@/Jetstream/Welcome.vue';
+import AppLayout from "@/Layouts/AppLayout.vue";
+import Welcome from "@/Jetstream/Welcome.vue";
+import { computed } from "vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
+
+let breadcrumbs = computed(() => {
+    return [
+        {
+            label: "Dashboard",
+        },
+        
+    ];
+});
 </script>
 
 <template>
     <AppLayout title="Dashboard">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Dashboard
-            </h2>
+            <Breadcrumbs :items="breadcrumbs"></Breadcrumbs>
         </template>
 
         <div class="py-12">
