@@ -5,15 +5,18 @@
         </template>
 
         <Container>
-            <jet-button :href="route('categories.create')">Add new</jet-button>
+            <jet-button :href="route('articles.create')">Add new</jet-button>
             <Card class="mt-4">
-                <AppTable :headers="headers" :items="categories">
-                    <tr v-for="category in categories.data" :key="category.id">
+                <AppTable :headers="headers" :items="articles">
+                    <tr v-for="article in articles.data" :key="article.id">
                         <td>
-                            {{ category.name }}
+                            {{ article.title }}
                         </td>
                         <td>
-                            {{ category.created_at_for_human }}
+                            {{ article.category.name }}
+                        </td>
+                        <td>
+                            {{ article.created_at_for_human }}
                         </td>
                         <td>
                             <div
@@ -21,30 +24,25 @@
                             >
                                 <EditBtn
                                     :url="
-                                        route('categories.edit', {
-                                            category: category.id,
+                                        route('articles.edit', {
+                                            article: article.id,
                                         })
                                     "
                                 />
                                 <DeleteBtn
                                     :url="
-                                        route('categories.destroy', {
-                                            category: category.id,
+                                        route('articles.destroy', {
+                                            article: article.id,
                                         })
                                     "
-                                    module-name="category"
+                                    module-name="article"
                                 />
                             </div>
                         </td>
                     </tr>
                 </AppTable>
 
-                <!-- <div class="mt-4">
-                    <SimplePagination
-                        :prev-url="categories.links.prev"
-                        :next-url="categories.links.next"
-                    />
-                </div> -->
+                
             </Card>
         </Container>
     </AppLayout>
@@ -54,7 +52,6 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
 import EditBtn from "../../Components/editBtn.vue";
 import DeleteBtn from "../../Components/deleteBtn.vue";
-
 import AppTable from "../../Components/Table.vue";
 import JetButton from "@/Jetstream/Button";
 import Container from "../../Components/Container.vue";
@@ -74,13 +71,16 @@ export default {
         Breadcrumbs,
     },
     props: {
-        categories: {},
+        articles: {},
     },
     computed: {
         headers() {
             return [
                 {
-                    name: "Name",
+                    name: "Title",
+                },
+                {
+                    name: "Category",
                 },
                 {
                     name: "Created Date",
@@ -95,14 +95,14 @@ export default {
         breadcrumbs() {
             return [
                 {
-                    label: "Categories",
+                    label: "Articles",
                 },
             ];
         },
     },
 
     // mounted() {
-    //     console.log("hello");
+    //     console.log(JSON.stringify(this.articles.data[0].category, null, 2));
     // },
 };
 </script>
