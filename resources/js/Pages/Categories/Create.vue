@@ -94,17 +94,7 @@ const props = defineProps({
     errors: Object,
 });
 
-let breadcrumbs = computed(() => {
-    return [
-        {
-            label: "Categories",
-            url: route("categories.index"),
-        },
-        {
-            label: `${props.edit ? "Edit" : "Add"} Category`,
-        },
-    ];
-});
+
 
 const saveCategory = () => {
     props.edit

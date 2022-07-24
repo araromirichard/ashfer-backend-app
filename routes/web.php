@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\ArticlesController;
+use App\Http\Controllers\Admin\ArticlesController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;

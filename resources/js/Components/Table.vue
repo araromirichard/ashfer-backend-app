@@ -26,6 +26,7 @@
     </div>
 </template>
 
+
 <script setup>
 import SimplePagination from "@/Components/SimplePagination.vue";
 const props = defineProps({

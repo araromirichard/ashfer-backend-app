@@ -1,28 +1,106 @@
 <template>
-    <AppLayout title="Dashboard">
+    <app-layout>
         <template #header>
-            <Breadcrumbs :items="breadcrumbs"></Breadcrumbs>
+            <Breadcrumbs :items="breadcrumbs" />
         </template>
 
-        <Container>
-            <Card>
-                <form @submit.prevent="saveCategory">
-                    <div>
-                        <jet-label for="name" value="Name" />
-                        <jet-input
-                            id="name"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.name"
-                            autocomplete="name"
-                        />
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <form
+                    class="p-4 sm:p-6 bg-white overflow-hidden shadow-xl sm:rounded-lg"
+                    @submit.prevent="saveArticle"
+                >
+                    <AppImage
+                        class="mt-2"
+                        v-model="form.image"
+                        :image-url="imageUrl"
+                        label="Image"
+                        :error-message="form.errors.image"
+                    />
+
+                    <!-- <div>
+                        <input
+                            type="file"
+                            class="hidden"
+                            ref="photo"
+                            @change="updatePhotoPreview"
+                        /> -->
+
+                    <!-- <jet-label for="Photo" value="Image" /> -->
+
+                    <!-- Current Profile Photo -->
+                    <!-- <div class="mt-2" v-show="!photoPreview">
+                            <img
+                                :src="imageUrl"
+                                class="rounded-full h-20 w-20 object-cover"
+                            />
+                        </div> -->
+
+                    <!-- New Profile Photo Preview -->
+                    <!-- <div class="mt-2" v-show="photoPreview">
+                            <span
+                                class="block rounded-full w-20 h-20"
+                                :style="
+                                    'background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url(\'' +
+                                    photoPreview +
+                                    '\');'
+                                "
+                            >
+                            </span>
+                        </div>
+
+                        <jet-secondary-button
+                            class="mt-2 mr-2"
+                            type="button"
+                            @click.native.prevent="selectNewPhoto"
+                        >
+                            Select A New Photo
+                        </jet-secondary-button>
+
                         <jet-input-error
-                            :message="form.errors.name"
+                            :message="form.errors.image"
+                            class="mt-2"
+                        />
+                    </div> -->
+
+                    <div class="mt-4">
+                        <jet-label for="category" value="Category" />
+
+                        <select
+                            name="category"
+                            id="category"
+                            class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
+                            v-model="form.category_id"
+                        >
+                            <option value="">Select</option>
+                            <option
+                                v-for="category in categories.data"
+                                :key="category.id"
+                                :value="category.id"
+                            >
+                                {{ category.name }}
+                            </option>
+                        </select>
+                        <jet-input-error
+                            :message="form.errors.category_id"
                             class="mt-2"
                         />
                     </div>
 
-                    <!-- slug -->
+                    <div class="mt-4">
+                        <jet-label for="title" value="Title" />
+                        <jet-input
+                            id="title"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.title"
+                            autocomplete="title"
+                        />
+                        <jet-input-error
+                            :message="form.errors.title"
+                            class="mt-2"
+                        />
+                    </div>
 
                     <div class="mt-4">
                         <jet-label for="slug" value="Slug" />
@@ -40,94 +118,140 @@
                     </div>
 
                     <div class="mt-4">
-                        <jet-action-message
-                            :on="form.recentlySuccessful"
-                            class="mr-3"
-                        >
-                            <span v-if="edit">Updated.</span>
-                            <span v-else>Saved.</span>
-                        </jet-action-message>
+                        <jet-label for="description" value="Description" />
 
+                        <AppCkeditor class="mt-1" v-model="form.description" />
+
+                        <jet-input-error
+                            :message="form.errors.description"
+                            class="mt-2"
+                        />
+                    </div>
+
+                    <div class="mt-4">
                         <jet-button
-                            v-on:click="saveCategory"
+                            v-on:click="saveArticle"
                             type="submit"
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            <span v-if="edit">Update</span>
-                            <span v-else>Save</span>
+                            Save
                         </jet-button>
                     </div>
                 </form>
-            </Card>
-        </Container>
-    </AppLayout>
+            </div>
+        </div>
+    </app-layout>
 </template>
-<script setup>
-import AppLayout from "@/Layouts/AppLayout.vue";
-import JetButton from "@/Jetstream/Button";
-import JetLabel from "@/Jetstream/Label";
+
+<script>
+import AppLayout from "@/Layouts/AppLayout";
+import Breadcrumbs from "@/Components/Breadcrumbs";
 import JetInput from "@/Jetstream/Input";
 import JetInputError from "@/Jetstream/InputError";
-import JetActionMessage from "@/Jetstream/ActionMessage";
-import { useForm } from "@inertiajs/inertia-vue3";
-import { watch, computed, onMounted } from "vue";
+import JetLabel from "@/Jetstream/Label";
+import JetButton from "@/Jetstream/Button";
+import JetSecondaryButton from "@/Jetstream/SecondaryButton";
+import AppImage from "@/Components/Image";
+import AppCkeditor from "@/Components/Ckeditor";
 import { strSlug } from "@/helpers.js";
-import Container from "../../Components/Container.vue";
-import Card from "../../Components/Card.vue";
-import Breadcrumbs from "../../Components/Breadcrumbs.vue";
-
-const form = useForm({
-    name: "",
-    slug: "",
-    error: {
-        name: null,
-        slug: null,
+import { useForm } from "@inertiajs/inertia-vue3";
+export default {
+    components: {
+        AppLayout,
+        JetInput,
+        JetInputError,
+        JetLabel,
+        Breadcrumbs,
+        JetSecondaryButton,
+        JetButton,
+        AppImage,
+        AppCkeditor,
     },
-    recentlySuccessful: false,
-    processing: false,
-});
-
-const props = defineProps({
-    edit: Boolean,
-    category: Object,
-    errors: Object,
-});
-
-let breadcrumbs = computed(() => {
-    return [
-        {
-            label: "Categories",
-            url: route("categories.index"),
+    props: {
+        edit: Boolean,
+        article: Object,
+        categories: {
+            type: Object,
+            default: function () {
+                return {
+                    data: [],
+                };
+            },
         },
-        {
-            label: `${props.edit ? "Edit" : "Add"} Category`,
-        },
-    ];
-});
+        errors: Object,
+    },
+    data() {
+        return {
+            imageUrl: "",
+            // photoPreview: null,
+            // form: this.$inertia.form(
+            //     {
+            //         _method: this.edit ? "PUT" : "",
+            //         category_id: "",
+            //         title: "",
+            //         slug: "",
+            //         description: this.edit ? this.article.data.description : "",
+            //         image: "",
+            //     },
+            //     {
+            //         resetOnSuccess: false,
+            //     }
+            // ),
+        };
+    },
+    setup(props) {
+        const form = useForm({
+            // _method: this.edit ? "PUT" : "",
+            category_id: "",
+            title: "",
+            slug: "",
+            description: props.edit ? props.article.data.description : "",
+            image: null,
+        });
 
-const saveCategory = () => {
-    props.edit
-        ? form.put(route("categories.update", { id: props.category.data.id }))
-        : form.post(route("categories.store"));
-    //form.post(route("categories.store"));
+        return {
+            form,
+        };
+    },
+    computed: {
+        breadcrumbs() {
+            return [
+                {
+                    label: "Articles",
+                    url: this.route("articles.index"),
+                },
+                {
+                    label: "Add Article",
+                },
+            ];
+        },
+    },
+    methods: {
+        saveArticle() {
+            console.log(JSON.stringify(this.form, null, 2));
+            this.edit
+                ? this.form.put(
+                      route("articles.update", { id: this.article.data.id })
+                  )
+                : this.form.post(route("articles.store"));
+        },
+    },
+    watch: {
+        "form.title"(title) {
+            if (this.edit) return;
+            this.form.slug = strSlug(title);
+        },
+    },
+    mounted() {
+        if (this.edit) {
+            this.form.category_id = this.article.data.category_id;
+            this.form.title = this.article.data.title;
+            this.form.slug = this.article.data.slug;
+            //this.imageUrl = this.article.data.image_url;
+        }
+        this.imageUrl = this.article.data.image_url;
+        console.log(this.imageUrl);
+    },
 };
-
-watch(
-    () => form.name, // watch the form.name field
-    (newValue) => {
-        form.slug = strSlug(newValue);
-    },
-    { immediate: true }
-);
-
-onMounted(() => {
-    if (props.edit) {
-        form.name = props.category.data.name;
-        form.slug = props.category.data.slug;
-
-        console.log(JSON.stringify(props.category, null, 2));
-        console.log(JSON.stringify(form, null, 2));
-    }
-});
 </script>

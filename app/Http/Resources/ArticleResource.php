@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ArticleResource extends JsonResource
@@ -18,11 +19,24 @@ class ArticleResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->when($this->slug, $this->slug),
-            'created_at_for_human' => $this->when($this->created_at, function(){
-                return $this->created_at->diffForHumans();
+            'category_id' => $this->when($this->category_id, $this->category_id),
+
+            $this->mergeWhen($this->description, function () {
+                return [
+                    'description' => $this->description,
+                    'small_description' => Str::limit(strip_tags($this->description), 80),
+                ];
             }),
-            
-            'category' => new CategoryResource($this->whenloaded('category')),
+
+            'image_url' => $this->imageUrl(),
+
+            $this->mergeWhen($this->created_at, function () {
+                return [
+                    'created_at_for_human' => $this->created_at->diffForHumans(),
+                    'created_date' => $this->created_at->format('M d, Y'),
+                ];
+            }),
+            'category' => new CategoryResource($this->whenLoaded('category')),
         ];
     }
 }

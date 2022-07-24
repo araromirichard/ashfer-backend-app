@@ -94,7 +94,7 @@ const clearPhotoFileInput = () => {
                     ref="photoInput"
                     type="file"
                     class="hidden"
-                    @change="updatePhotoPreview"
+                      @change="updatePhotoPreview"
                 >
 
                 <JetLabel for="photo" value="Photo" />
@@ -179,7 +179,8 @@ const clearPhotoFileInput = () => {
                 Saved.
             </JetActionMessage>
 
-            <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+            <JetButton v-on:click="updateProfileInformation"
+                            type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                 Save
             </JetButton>
         </template>
