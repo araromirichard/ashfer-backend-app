@@ -39,45 +39,6 @@
     </div>
 </template>
 
-<!-- <script>
-import JetLabel from "@/Jetstream/Label";
-import JetSecondaryButton from "@/Jetstream/SecondaryButton";
-import JetInputError from "@/Jetstream/InputError";
-export default {
-  components: {
-    JetLabel,
-    JetSecondaryButton,
-    JetInputError,
-  },
-  props: {
-    imageUrl: {},
-    label: {},
-    errorMessage: {},
-  },
-  data() {
-    return {
-      photoPreview: null,
-    };
-  },
-  computed: {},
-  methods: {
-    updatePhotoPreview() {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.photoPreview = e.target.result;
-      };
-      reader.readAsDataURL(this.$refs.photo.files[0]);
-      this.$emit("input", this.$refs.photo.files[0]);
-    },
-    selectNewPhoto() {
-      this.$refs.photo.click();
-    },
-  },
-  watch: {},
-  mounted() {},
-};
-</script> -->
-
 <script setup>
 import JetLabel from "@/Jetstream/Label";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";

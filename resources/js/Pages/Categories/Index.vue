@@ -16,35 +16,19 @@
                             {{ category.created_at_for_human }}
                         </td>
                         <td>
-                            <div
-                                class="flex items-center justify-end space-x-2"
-                            >
-                                <EditBtn
-                                    :url="
-                                        route('categories.edit', {
-                                            category: category.id,
-                                        })
-                                    "
-                                />
-                                <DeleteBtn
-                                    :url="
-                                        route('categories.destroy', {
-                                            category: category.id,
-                                        })
-                                    "
-                                    module-name="category"
-                                />
+                            <div class="flex items-center justify-end space-x-2">
+                                <EditBtn :url="route('categories.edit', {
+                                    category: category.id,
+                                })
+                                    " />
+                                <DeleteBtn :url="route('categories.destroy', {
+                                    category: category.id,
+                                })
+                                    " module-name="category" />
                             </div>
                         </td>
                     </tr>
                 </AppTable>
-
-                <!-- <div class="mt-4">
-                    <SimplePagination
-                        :prev-url="categories.links.prev"
-                        :next-url="categories.links.next"
-                    />
-                </div> -->
             </Card>
         </Container>
     </AppLayout>

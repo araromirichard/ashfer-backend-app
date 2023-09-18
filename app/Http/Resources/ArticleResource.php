@@ -37,6 +37,10 @@ class ArticleResource extends JsonResource
                 ];
             }),
             'category' => new CategoryResource($this->whenLoaded('category')),
+            'tags' => TagResource::collection($this->whenLoaded('tags'))->additional([
+                'pivot' => $this->tags->pluck('pivot'),
+            ]),
+            
         ];
     }
 }

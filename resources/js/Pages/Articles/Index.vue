@@ -12,37 +12,34 @@
                         <td>
                             {{ article.title }}
                         </td>
+
                         <td>
                             {{ article.category.name }}
+                        </td>
+                        <td>
+                            <select class="border-transparent focus:border-transparent">
+                                <option v-for="tag in article.tags" :key="tag.id">{{ tag.name }}</option>
+                            </select>
                         </td>
                         <td>
                             {{ article.created_at_for_human }}
                         </td>
                         <td>
-                            <div
-                                class="flex items-center justify-end space-x-2"
-                            >
-                                <EditBtn
-                                    :url="
-                                        route('articles.edit', {
-                                            article: article.id,
-                                        })
-                                    "
-                                />
-                                <DeleteBtn
-                                    :url="
-                                        route('articles.destroy', {
-                                            article: article.id,
-                                        })
-                                    "
-                                    module-name="article"
-                                />
+                            <div class="flex items-center justify-end space-x-2">
+                                <EditBtn :url="route('articles.edit', {
+                                    article: article.id,
+                                })
+                                    " />
+                                <DeleteBtn :url="route('articles.destroy', {
+                                    article: article.id,
+                                })
+                                    " module-name="article" />
                             </div>
                         </td>
                     </tr>
                 </AppTable>
 
-                
+
             </Card>
         </Container>
     </AppLayout>
@@ -81,6 +78,9 @@ export default {
                 },
                 {
                     name: "Category",
+                },
+                {
+                    name: "Tags",
                 },
                 {
                     name: "Created Date",

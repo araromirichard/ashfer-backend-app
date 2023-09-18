@@ -4,8 +4,10 @@ namespace Database\Factories;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\DocBlock\TagFactory;
 
 class ArticleFactory extends Factory
 
@@ -24,6 +26,7 @@ class ArticleFactory extends Factory
 
         return [
             'category_id' => Category::factory(),
+            'tag_id' => Tag::factory(),
             'title' => $title,
             'slug' => Str::slug($title),
             'image' => '',

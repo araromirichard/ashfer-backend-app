@@ -30,8 +30,8 @@ class Article extends Model implements ImageableContract
         return $this->belongsTo(Category::class, 'category_id')->withDefault();
     }
 
-    // public function tag()
-    // {
-    //     return $this->belongsToMany(Tag::class);
-    // }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
 }

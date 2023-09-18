@@ -13,7 +13,7 @@
         </thead>
         <tbody>
             <slot></slot>
-            <tr v-if="items.data.length === 0" class="">
+            <tr v-if="items.data.length === 0" class=" text-center">
                 <td class="p-4" :colspan="headers.length">No data Available</td>
             </tr>
         </tbody>
